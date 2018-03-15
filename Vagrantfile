@@ -15,6 +15,7 @@ Vagrant.configure(2) do |config|
 
   # add the local user git config to the vm
   config.vm.provision "file", source: "~/.gitconfig", destination: ".gitconfig"
+  config.vm.synced_folder "C:\\Users\\awagner\\Documents\\github\\PlatformSync\\docs", "/vagrant/build"
 
   config.vm.provision "install",
     type: "shell",
