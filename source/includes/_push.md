@@ -10,56 +10,57 @@ The following table represents the data that should be sent to Loomis to configu
 
 Name | Required | More info
 ---- | -------- | ---------
-Enpoints | Yes | Your service endpoint that will accept the POST payload containing transactions.  Multiple endpoints supported.
-ApiKeys | Yes | Long-lived bearer token to authenticate with your service.  will be passed in the `Authorization` header.  Can be specified _per Endpoint_.
-EndpointMetadata | No | Additional payload to send.  Should be key-value pairs
-NotificationRecipients | No | Email addresses to send notifications to
-ExpectedFormat | No | Only JSON datatypes are supported at this time.
-TransactionWhitelist | No | List of transactions that will be sent (See "Interested Transactions" below)
-TransactionTriggers | No | List of transactions that will trigger sending other data.  See "Transaction Triggers" below for more information.
-MaxBatchSize | No | Maximum number of transactions to send at a time.  Defaults to 1000
-DefaultMessageTTL | No | Exipration of messages. Defaults to 24 Hours
+Endpoints | Yes | Your service endpoint that will accept the POST payload containing transactions.  Multiple endpoints supported.
+Endpoint Type | No | Specifies type of environment (production, test, development, etc). Defaults to our service value (PlatformSync in `test` will default this value to `test`.)
+API Key(s) | Yes | Long-lived bearer token to authenticate with your service.  Should be specified _per Endpoint_.
+API Key Property | Yes | What key to use when sending the API key in the payload. Defaults to `Authorization`
+API Key Placement | Yes | Where to place the API Key/Value pair.  Defaults to `header`
+Endpoint Metadata | No | Additional payload to send.  Should be key-value pairs
+Notification Recipients | No | Email addresses to send notifications to
+Expected Format | No | Only JSON datatypes are supported at this time.
+Transaction Whitelist | No | List of transactions that will be sent (See "Transaction Whitelist" below)
+Transaction Triggers | No | List of transactions that will trigger sending other data.  See "Transaction Triggers" below for more information.
+Max Batc hSize | No | Maximum number of transactions to send at a time.  Defaults to 1000
+Default Message TTL | No | Exipration of messages. Defaults to 24 Hours
 
-## URLs
+## Endpoint URLs
 
 You must provide a minimum of one REST endpoint for your data to be posted to.  The transactions will be sent as an HTTP POST.  Please note that all transactions will be sent to all the URL endpoints that you specify
 
 ## Security
 
-Security should be implemented as a long-lived, unique API token.  We do not yet support security via OAuth or username/password.
+Security should be implemented as a long-lived, unique API token.  We do not yet support security via OAuth, certificates or username/password.
 
-The token will be passed to your REST endpoint either in the body or as an `Authorization` header as a bearer token.
+The token will be passed to your REST endpoint in the manner you specify (either in the body, query string, or header) with the property name you specify as well.
 
-## Interested Transactions
+## Transaction Whitelist
 
 You may choose to receive any of the following types of transactions:
 
-* End of Day
-* End of Shift
-* Validated Drop
-* Change Purchase
-* Servicing
-
-In addition, you may choose certain "buffer" points, where transactions are not sent to you until a certain type of transaction occurs.  For example, you may hold validated drops and servicings until an End of Day occurs, at which point all transactions that have not yet been sent will be sent along with the EOD transaction.
+* Validated Drop = 1
+* Change Purchase = 2
+* End of Day = 3
+* End of Shift = 4
+* Servicing = 5
 
 ## Transaction Triggers
 
-Coming soon... 
+You may choose certain "buffer" points, where transactions are not sent to you until a certain type of transaction occurs.  For example, you may hold validated drops and servicings until an End of Day occurs, at which point all transactions that have not yet been sent will be sent along with the EOD transaction.
 
 ## Payload
 
 ```json
-    {
-        count: 1000,
-        remaining: 2322,
-        start: 0,
-        transactions: [
-            { /* Transaction object */ }
-        ]
-    }
+{
+    count: 1000,
+    total: 2322,
+    start: 0,
+    transactions: [
+        { /* Transaction object */ }
+    ]
+}
 ```
 
-We will POST transactionsThe transactions will come in JSON format, and will follow consistent patterns.
+We will send transactions as a POST. The transactions will come in JSON format, and will follow consistent patterns.
 
 You should supply us with a desired size (in transaction count) of your payload.  We will default to 1,000 transactions at a time.
 
