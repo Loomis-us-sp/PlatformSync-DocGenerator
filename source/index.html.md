@@ -9,6 +9,8 @@ toc_footers:
 
 includes:
   - push
+  - common
+  - transactions
 
 search: true
 ---
@@ -35,7 +37,7 @@ As its name implies, the Push API will push data into your API via REST endpoint
 
 ## PlatformSync Pull API
 
-The Pull API will enable you to connect to our API REST service to query for transactional data.  You will also use this service to get data that was missed from the Push Service
+The Pull API will enable you to connect to our API REST service to query for transactional data.  In the event of a failure, you can also use this service to get data that was missed from the Push API.
 
 ## Missing Data
 
