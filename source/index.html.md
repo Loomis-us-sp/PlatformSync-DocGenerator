@@ -6,6 +6,7 @@ language_tabs:
 
 toc_footers:
   - <a href='https://github.com/Loomis-us-sp/PlatformSync/issues'>Issues</a>
+  - <a href='https://github.com/Loomis-us-sp/PlatformSync#loomis-safepoint-platformsync'>Why PlatformSync?</a>
 
 includes:
   - push
