@@ -10,7 +10,7 @@ toc_footers:
 
 includes:
   - push
-  - common
+  # - common
   - transactions
 
 search: true
@@ -29,19 +29,27 @@ Welcome to the Loomis PlatformSync API!
 Our API comes in 2 flavors, Push API, and Pull API.
 
 <aside class="notice">
-<strong>Early Development Warning</strong> Note that this API (and associated documentation) is in VERY early stages of development.  It should be expected that, as long as you see this message, that the API can, and will, change. You have been warned!
+<strong>Early Development Warning</strong> Note that this API (and associated documentation) is in early stages of development.  It should be expected that, as long as you see this message, that the API can, and will, change. You have been warned!
 </aside>
 
 ## PlatformSync Push API
 
-As its name implies, the Push API will push data into your API via REST endpoints provided by you.  This will enable near-real-time transactional data.
+As its name implies, the Push API will push transactions into your endpoints provided by you. The transactions will be sent as soon as they are available and processed by our systems.
 
 ## PlatformSync Pull API
 
 The Pull API will enable you to connect to our API REST service to query for transactional data.  In the event of a failure, you can also use this service to get data that was missed from the Push API.
 
-## Missing Data
+<aside class="warning">
+<strong>This API has not available at this time.</strong>
+</aside>
 
-There may be instances where you would expect data to be coming to you, but it is not there.  In _most_ cases, this is due to a data quality alert that halts processing until someone can take action on the alert.  
+## Transaction Delivery and Exceptions
 
-In other instances, we may have been unable to deliver messages to your endpoints (in the case that you're using the Push API).  In these instances, you will want to use the Pull API to fill in the missing information.
+Transactions flow from the safe into our system (the timing of this depends on a number of factors). In most cases, if we have connectivity to the safe and there is no issue with the quality of the data, then the transactions will flow through our system very quickly.
+
+However, there are some exceptions that could impact delivery of transactions.
+
+First, our system performs a series of checks to ensure that the transactions are genuine and trustworthy. If our system determines that there is a potential issue, then processing is halted until our staff can ensure data quality.
+
+Second, we may have problems communicating with your service. In this case, we will attempt to redeliver the messages on an interval for 24 hours. See "Message Expiration" below for additional information. 

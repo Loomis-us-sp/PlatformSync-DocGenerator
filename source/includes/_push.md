@@ -1,61 +1,70 @@
 # Push API
 
-The Push API will push certain types of transactions to your supplied REST endpoints. We will send the transactions as soon as they occur on the safe and are processed by our system.
+The Push API will push certain types of transactions to your supplied endpoints. We will send the transactions as soon as they are available and processed by our system.
 
 ## Setup
 
-Right now, the setup for thie service is a manual process.  We have plans to integrate this into Loomis Direct, but at this time, we are not there yet.  To begin the setup process, you must communicate directly with our development teams who will perform the requisite setup on our systems.
+To begin the setup process, you must communicate directly with our support staff who will perform the requisite setup on our systems.  Send an email to LoomisSafePointSupport@us.loomis.com to get started.
 
 The following table represents the data that should be sent to Loomis to configure this service.
 
 Name | Required | More info
 ---- | -------- | ---------
-Endpoints | Yes | Your service endpoint that will accept the POST payload containing transactions.  Multiple endpoints supported.
-Endpoint Type | No | Specifies type of environment (production, test, development, etc). Defaults to our service value (PlatformSync in `test` will default this value to `test`.)
+Endpoints | Yes | Your service endpoint that will accept the POST payload containing transactions.  Multiple endpoints are supported. **NOTE** all data is sent to all the endpoints you provide.
+Endpoint Type | No | Specifies type of environment (production, test, development, etc). This is an indicator for our staff to know what type of enviroment the endpoint is.
 API Key(s) | Yes | Long-lived bearer token to authenticate with your service.  Should be specified _per Endpoint_.
-API Key Property | Yes | What key to use when sending the API key in the payload. Defaults to `Authorization`
-API Key Placement | Yes | Where to place the API Key/Value pair.  Defaults to `header`
-Endpoint Metadata | No | Additional payload to send.  Should be key-value pairs
-Notification Recipients | No | Email addresses to send notifications to in the event of a failure
-Expected Format | No | Only JSON datatypes are supported at this time.
-Transaction Whitelist | No | List of transactions that will be sent (See "Transaction Whitelist" below)
-Transaction Triggers | No | List of transactions that will trigger sending other data.  See "Transaction Triggers" below for more information.
-Max Batch Size | No | Maximum number of transactions to send at a time.  Defaults to 1000
-Default Message TTL | No | Exipration of messages. Defaults to 24 Hours
+API Key Name | Yes | What key to use when sending the API key in the payload. Defaults to `Authorization`.
+API Key Placement | Yes | Where to place the API Key/Value pair.  Defaults to `header`.  Can be one of `header`, `body`, `query` or `metadata`
+Endpoint Metadata | No | Additional payload to send.  Should be key-value pairs.  Keys and values should be strings only.
+Notification Recipients | No | Email addresses to send notifications to in the event of a failure. See "Failure Notifications" below for more information.
+Transaction Whitelist | No | List of transactions that will be sent (See "Transaction Whitelist" below).
+Max Batch Size | No | Maximum number of transactions to send at a time.  Defaults to 1000. Maximum value is 1000.
 
 ## Endpoint URLs
 
-You must provide a minimum of one REST endpoint for your data to be posted to.  The transactions will be sent as an HTTP POST.  Please note that all transactions will be sent to all the URL endpoints that you specify
+You must provide a minimum of one _public_ endpoint for your data to be sent to. The transactions will be sent as an HTTP POST.  Please note that a copy of all transactions will be sent to all the endpoints that you provide.
+
+Also note that the endpoint must be accessible to the internet without any VPN connection.
 
 ## Security
 
-Security should be implemented as a long-lived, unique API token.  We do not yet support security via OAuth, certificates or username/password.
+Security should be implemented as a long-lived, unique API token.  We do not support security via OAuth, certificates or username/password.
 
-The token will be passed to your REST endpoint in the manner you specify (either in the body, query string, or header) with the property name you specify as well.
+The token will be passed to your endpoint in the manner you specify (either in the body, query string, or header) with the property name you specify as well.
+
+The provided endpoint(s) must be HTTPS only.
 
 ## Transaction Whitelist
 
 You may choose to receive any combination of the following types of transactions:
 
-- Validated Drop = 1
-- Manual Drop = 2
-- Change Purchase = 3
-- End of Day = 4
-- End of Shift = 5
-- Servicing = 6
-
-## Transaction Triggers
-
-You may choose certain "buffer" points, where transactions are not sent to you until a certain type of transaction occurs.  For example, you may hold validated drops and servicings until an End of Day (EOD) occurs, at which point all transactions that have not yet been sent will be sent along with the EOD transaction.
+- ValidatedCashIn = 30
+  - Cashin performed by the note validator on the safe
+- Servicing = 31
+  - A pickup by a Loomis courier
+- ChangePurchase = 32
+  - A request for an amount of change to be delivered and paid for out of the validated cash already dropped
+- ManualCashTransaction = 51
+  - A manual, non-validated drop
+- CoinDispense = 90
+  - Coins that were dispensed
+- NoteDispense = 91
+  - Notes that were dispensed
+- TubeRemoved = 92
+  - Tube removed from safe
+- TubeLoaded = 93
+  - Tube loaded into safe
+- EndOfDay = 100
+  - End of the accounting period on the safe
 
 ## Failure Notifications
 
-If we are unable to deliever your data after a predefined number of retries, we will notifiy the defined email addresses of the failure.  It will then be your responsiblity to get these failed transactions from the Pull API.
+We will attempt to deliver messages in a timely manner.  If we are unable to reach your service, we will notify the email addresses provided by you of that failure, and will continue to attempt to deliver the messages.
 
 ## Message Expiration
 
-We will attempt to deliver your data on an interval for a period of 24 hours (or whatever your defined TTL is).
+We will attempt to deliver your data on an interval for a period of 24 hours. If, after the 24-hours, we are still unable to deliever the transactions, we will send a second notification, and the messages will expire and not be retried.
 
-## Caveats
+## Message Delivery Order
 
-In the event of a failure, we will do our best to deliver recovered transactions in the same order in which they occured. However, your system should be resilient enough to handle out-of-order transactions.
+We will deliver the transactions ordered by date in which they occured on the safe. We will make every attempt to deliver the transactions in the order in which they are processed by our system. However, occasionaly, in the even of a failure, these messages may come in out of order. Your service should take this into account when accepting transactions.
