@@ -7,6 +7,7 @@ Vagrant.configure(2) do |config|
     inline: <<-SHELL
       sudo apt-add-repository ppa:brightbox/ruby-ng
       sudo apt-get update
+      sudo apt-get install -yq zlib1g-dev
       sudo apt-get install -yq ruby2.4 ruby2.4-dev
       sudo apt-get install -yq pkg-config build-essential nodejs git libxml2-dev libxslt-dev
       sudo apt-get autoremove -yq
