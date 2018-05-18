@@ -26,6 +26,12 @@ You must provide a minimum of one _public_ endpoint for your data to be sent to.
 
 Also note that the endpoint must be accessible to the internet without any VPN connection.
 
+## Capacity Planning
+
+There may be instances where we are POSTing a large volume of transactions at one time. Your service should be able to handle these bursts of high load.  This can be mitigated by specifying a smaller batch size. However, this will result in more messages.
+
+Loomis will work with you during the setup phase to provide an estimate of the expected load.
+
 ## Security
 
 Security should be implemented as a long-lived, unique API token.  We do not support security via OAuth, certificates or username/password.
@@ -38,23 +44,23 @@ The provided endpoint(s) must be HTTPS only.
 
 You may choose to receive any combination of the following types of transactions:
 
-- ValidatedCashIn = 30
+- ValidatedCashIn
   - Cashin performed by the note validator on the safe
-- Servicing = 31
+- Servicing
   - A pickup by a Loomis courier
-- ChangePurchase = 32
+- ChangePurchase
   - A request for an amount of change to be delivered and paid for out of the validated cash already dropped
-- ManualCashTransaction = 51
+- ManualCashTransaction
   - A manual, non-validated drop
-- CoinDispense = 90
+- CoinDispense
   - Coins that were dispensed
-- NoteDispense = 91
+- NoteDispense
   - Notes that were dispensed
-- TubeRemoved = 92
+- TubeRemoved 
   - Tube removed from safe
-- TubeLoaded = 93
+- TubeLoaded
   - Tube loaded into safe
-- EndOfDay = 100
+- EndOfDay
   - End of the accounting period on the safe
 
 ## Failure Notifications

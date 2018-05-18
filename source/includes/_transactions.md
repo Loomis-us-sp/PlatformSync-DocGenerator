@@ -14,7 +14,7 @@
             "RetrievedOn": "2018-05-11T17:29:32.4668424-05:00",
             "TransactionDateTime": "2018-05-10T17:39:57.5717919",
             "UserName": "1UAUOVPITN4",
-            "TransactionType": 30,
+            "TransactionType": "ValidatedCashIn",
             "Amount": 2203.0,
             "Denominations": [
                 {
@@ -79,15 +79,15 @@ DepositReferenceNumber | Deposit Reference Number, if any, that was used for the
 
 **Transaction Types**
 
-- ValidatedCashIn = 30
-- Servicing = 31
-- ChangePurchase = 32
-- ManualCashTransaction = 51
-- CoinDispense = 90
-- NoteDispense = 91
-- TubeRemoved = 92
-- TubeLoaded = 93
-- EndOfDay = 100
+- ValidatedCashIn
+- Servicing
+- ChangePurchase
+- ManualCashTransaction
+- CoinDispense
+- NoteDispense
+- TubeRemoved
+- TubeLoaded
+- EndOfDay
 
 **Denomination Object**
 
