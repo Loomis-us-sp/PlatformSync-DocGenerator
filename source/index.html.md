@@ -28,10 +28,6 @@ Welcome to the Loomis PlatformSync API!
 
 Our API comes in 2 flavors, Push API, and Pull API.
 
-<aside class="notice">
-<strong>Early Development Warning</strong> Note that this API (and associated documentation) is in early stages of development.  It should be expected that, as long as you see this message, that the API can, and will, change. You have been warned!
-</aside>
-
 ## PlatformSync Push API
 
 As its name implies, the Push API will push transactions into your endpoints provided by you. The transactions will be sent as soon as they are available and processed by our systems.
