@@ -79,15 +79,19 @@ DepositReferenceNumber | Deposit Reference Number, if any, that was used for the
 
 **Transaction Types**
 
-- ValidatedCashIn
+- CashIn
 - Servicing
-- ChangePurchase
+- ChangeRequest
 - ManualCashTransaction
+- CoinDispenseBuyChange
+- NoteDispenseBuyChange
 - CoinDispense
 - NoteDispense
 - TubeRemoved
 - TubeLoaded
 - EndOfDay
+- Placeholder
+- TubeDumped
 
 **Denomination Object**
 
